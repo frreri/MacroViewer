@@ -76,6 +76,7 @@ def setPath():
         c.execute("UPDATE settings SET value = '{}' WHERE option = 'path'".format(new_path.lower()))
         conn.commit()
     conn.close()
+
 macro_canvas = {}
 macro_frames = {}
 macro_objects = {}
@@ -285,7 +286,7 @@ def findMacros():
                                 macro_texts[item.account+item.realm+item.name+char_macro].insert(tk.INSERT, item.macroText[idx][1:])
                             else:
                                 macro_texts[item.account+item.realm+item.name+char_macro].insert(tk.INSERT, item.macroText[idx])
-                            macro_texts[item.account+item.realm+item.name+char_macro].grid(row = grid_row+1, column=grid_col, padx=5)
+                            macro_texts[item.account+item.realm+item.name+char_macro].grid(row = grid_row+1, column=grid_col, padx=5)    
     runCanv()
     resetScroll()
 
