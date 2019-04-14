@@ -34,7 +34,7 @@ class MacroObject(object):
         self.macroText = []
 
 def pathfind():
-    drives = ['c','d','e','f','g','h','i']
+    drives = ['c','d','e','f','g','h','i','j']
     paths = [':\\program files (x86)', ':\\program files', ':\\spel', ':\\games', ':\\']
     for drive in drives:
         for path in paths:
