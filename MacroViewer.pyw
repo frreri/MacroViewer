@@ -1,10 +1,10 @@
 import os
-from os.path import expanduser
-import tkinter as tk
-from tkinter import ttk
-from tkinter import simpledialog
-import tkinter.messagebox
 import sqlite3
+import tkinter as tk
+import tkinter.messagebox
+from os.path import expanduser
+from tkinter import simpledialog, ttk
+
 from SetIcon import iconData
 
 home = expanduser("~\\Documents\\MacroViewer")
