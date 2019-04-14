@@ -82,6 +82,7 @@ macro_objects = {}
 account_tab_control = {}
 account_realm_tab_control = {}
 tabControl = {}
+
 def findMacros():
     path_list = []
     global macro_objects
