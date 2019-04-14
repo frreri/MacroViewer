@@ -350,6 +350,7 @@ subMeny1.add_command(label="Exit", command=master.destroy)
 subMeny2 = tk.Menu(menyn)
 menyn.add_cascade(label="Edit", menu=subMeny2)
 subMeny2.add_command(label="Set path", command=setPath)
+# I will add a theme selection sub menu here.
 subMeny3 = tk.Menu(menyn)
 menyn.add_cascade(label="Info", menu=subMeny3)
 subMeny3.add_command(label="About", command=showInfo)
