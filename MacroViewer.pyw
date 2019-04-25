@@ -84,6 +84,25 @@ macro_objects = {}
 account_tab_control = {}
 account_realm_tab_control = {}
 tabControl = {}
+macro_texts = {}
+
+def create_macro_gui(item):
+    for idx, macro_name in enumerate(item.macroName):
+        if idx % 2 == 0:
+            grid_col = 0
+            grid_row = idx
+        else:
+            grid_col = 1
+            grid_row = idx-1
+        tk.Label(macro_frames[item.arn_key], text=macro_name, font="none 8 bold").grid(
+            row = grid_row, column=grid_col,sticky=tk.W, padx=5)
+        macro_texts.update({item.arn_key+macro_name : tk.Text(macro_frames[item.arn_key],
+            height=6, width=55, relief=tk.GROOVE,bd=2,wrap="word")})
+        if item.macroText[idx].startswith('\n'):
+            macro_texts[item.arn_key+macro_name].insert(tk.INSERT, item.macroText[idx][1:])
+        else:
+            macro_texts[item.arn_key+macro_name].insert(tk.INSERT, item.macroText[idx])
+        macro_texts[item.arn_key+macro_name].grid(row = grid_row+1, column=grid_col, padx=5)
 
 def findMacros():
     path_list = []
@@ -105,6 +124,7 @@ def findMacros():
     macro_scrollbars = {}
     global macro_frames
     macro_frames = {}
+    global macro_texts
     macro_texts = {}
     conn= sqlite3.connect(home+'\\'+'config.db')
     c = conn.cursor()
@@ -170,22 +190,7 @@ def findMacros():
                                 macro_scrollbars[item.arn_key].pack(side="right",fill="y")
                                 macro_canvas[item.arn_key].pack(side="left")
                                 macro_canvas[item.arn_key].create_window((0,0),window=macro_frames[item.arn_key],anchor="nw")
-                                for idx, global_macro in enumerate(item.macroName):
-                                    if idx % 2 == 0:
-                                        grid_col = 0
-                                        grid_row = idx
-                                    else:
-                                        grid_col = 1
-                                        grid_row = idx-1
-                                    tk.Label(macro_frames[item.arn_key], text=global_macro, font="none 8 bold").grid(
-                                        row = grid_row, column=grid_col,sticky=tk.W, padx=5)
-                                    macro_texts.update({item.arn_key+global_macro : tk.Text(macro_frames[item.arn_key],
-                                        height=6, width=55, relief=tk.GROOVE,bd=2,wrap="word")})
-                                    if item.macroText[idx].startswith('\n'):
-                                        macro_texts[item.arn_key+global_macro].insert(tk.INSERT, item.macroText[idx][1:])
-                                    else:
-                                        macro_texts[item.arn_key+global_macro].insert(tk.INSERT, item.macroText[idx])
-                                    macro_texts[item.arn_key+global_macro].grid(row = grid_row+1, column=grid_col, padx=5)
+                                create_macro_gui(item)
                 except:
                     account_realms.setdefault(item.account, []).append(item.realm)
                     account_realm_tabs.update({item.account+item.realm : ttk.Frame(account_tab_control[item.account])})
@@ -206,22 +211,7 @@ def findMacros():
                             macro_scrollbars[item.arn_key].pack(side="right",fill="y")
                             macro_canvas[item.arn_key].pack(side="left")
                             macro_canvas[item.arn_key].create_window((0,0),window=macro_frames[item.arn_key],anchor="nw")
-                            for idx, global_macro in enumerate(item.macroName):
-                                if idx % 2 == 0:
-                                    grid_col = 0
-                                    grid_row = idx
-                                else:
-                                    grid_col = 1
-                                    grid_row = idx-1
-                                tk.Label(macro_frames[item.arn_key], text=global_macro, font="none 8 bold").grid(
-                                    row = grid_row, column=grid_col,sticky=tk.W, padx=5)
-                                macro_texts.update({item.arn_key+global_macro : tk.Text(macro_frames[item.arn_key],
-                                    height=6, width=55, relief=tk.GROOVE,bd=2,wrap="word")})
-                                if item.macroText[idx].startswith('\n'):
-                                    macro_texts[item.arn_key+global_macro].insert(tk.INSERT, item.macroText[idx][1:])
-                                else:
-                                    macro_texts[item.arn_key+global_macro].insert(tk.INSERT, item.macroText[idx])
-                                macro_texts[item.arn_key+global_macro].grid(row = grid_row+1, column=grid_col, padx=5)
+                            create_macro_gui(item)
             if item.account == objects.account and item.realm == objects.realm and not item.name == 'Global':
                 try:
                     if item.name not in account_realm_character[item.account+item.realm]:
@@ -240,22 +230,7 @@ def findMacros():
                             macro_scrollbars[item.arn_key].pack(side="right",fill="y")
                             macro_canvas[item.arn_key].pack(side="left")
                             macro_canvas[item.arn_key].create_window((0,0),window=macro_frames[item.arn_key],anchor="nw")
-                            for idx, char_macro in enumerate(item.macroName):
-                                if idx % 2 == 0:
-                                    grid_col = 0
-                                    grid_row = idx
-                                else:
-                                    grid_col = 1
-                                    grid_row = idx-1
-                                tk.Label(macro_frames[item.arn_key], text=char_macro, font="none 8 bold").grid(
-                                    row = grid_row, column=grid_col,sticky=tk.W, padx=5)
-                                macro_texts.update({item.arn_key+char_macro : tk.Text(macro_frames[item.arn_key],
-                                    height=6, width=55, relief=tk.GROOVE,bd=2,wrap="word")})
-                                if item.macroText[idx].startswith('\n'):
-                                    macro_texts[item.arn_key+char_macro].insert(tk.INSERT, item.macroText[idx][1:])
-                                else:
-                                    macro_texts[item.arn_key+char_macro].insert(tk.INSERT, item.macroText[idx])
-                                macro_texts[item.arn_key+char_macro].grid(row = grid_row+1, column=grid_col, padx=5)
+                            create_macro_gui(item)
                 except:
                     account_realm_character.setdefault(item.account+item.realm, []).append(item.name)
                     account_realm_character_tabs.update({item.arn_key : ttk.Frame(account_realm_tab_control[item.account+item.realm])})
@@ -272,22 +247,7 @@ def findMacros():
                         macro_scrollbars[item.arn_key].pack(side="right",fill="y")
                         macro_canvas[item.arn_key].pack(side="left")
                         macro_canvas[item.arn_key].create_window((0,0),window=macro_frames[item.arn_key],anchor="nw")
-                        for idx, char_macro in enumerate(item.macroName):
-                            if idx % 2 == 0:
-                                grid_col = 0
-                                grid_row = idx
-                            else:
-                                grid_col = 1
-                                grid_row = idx-1
-                            tk.Label(macro_frames[item.arn_key], text=char_macro, font="none 8 bold").grid(
-                                row = grid_row, column=grid_col,sticky=tk.W, padx=5)
-                            macro_texts.update({item.arn_key+char_macro : tk.Text(macro_frames[item.arn_key],
-                                height=6, width=55, relief=tk.GROOVE,bd=2,wrap="word")})
-                            if item.macroText[idx].startswith('\n'):
-                                macro_texts[item.arn_key+char_macro].insert(tk.INSERT, item.macroText[idx][1:])
-                            else:
-                                macro_texts[item.arn_key+char_macro].insert(tk.INSERT, item.macroText[idx])
-                            macro_texts[item.arn_key+char_macro].grid(row = grid_row+1, column=grid_col, padx=5)
+                        create_macro_gui(item)
     runCanv()
     resetScroll()
 
