@@ -30,6 +30,7 @@ class MacroObject(object):
         self.realm = realm
         self.name = name
         self.path = path
+        self.ar_key = self.account + self.realm
         self.arn_key = self.account + self.realm + self.name
         self.macroName = []
         self.macroText = []
@@ -85,8 +86,19 @@ account_tab_control = {}
 account_realm_tab_control = {}
 tabControl = {}
 macro_texts = {}
+macro_canvas_frames = {}
+macro_scrollbars = {}
 
 def create_macro_gui(item):
+    macro_canvas_frames[item.arn_key].grid(row=0, column=0)
+    macro_canvas.update({item.arn_key : tk.Canvas(macro_canvas_frames[item.arn_key], highlightthickness=0)})
+    macro_frames.update({item.arn_key : tk.Frame(macro_canvas[item.arn_key])})
+    macro_scrollbars.update({item.arn_key : tk.Scrollbar(macro_canvas_frames[item.arn_key],
+        orient="vertical",command=macro_canvas[item.arn_key].yview)})
+    macro_canvas[item.arn_key].configure(yscrollcommand=macro_scrollbars[item.arn_key].set)
+    macro_scrollbars[item.arn_key].pack(side="right",fill="y")
+    macro_canvas[item.arn_key].pack(side="left")
+    macro_canvas[item.arn_key].create_window((0,0),window=macro_frames[item.arn_key],anchor="nw")
     for idx, macro_name in enumerate(item.macroName):
         if idx % 2 == 0:
             grid_col = 0
@@ -118,9 +130,11 @@ def findMacros():
     account_realm_tab_control = {}
     account_realm_character = {}
     account_realm_character_tabs = {}
+    global macro_canvas_frames
     macro_canvas_frames = {}
     global macro_canvas
     macro_canvas = {}
+    global macro_scrollbars
     macro_scrollbars = {}
     global macro_frames
     macro_frames = {}
@@ -171,42 +185,24 @@ def findMacros():
             if item.account == objects.account:
                 if account_realms.get(item.account) == None or item.realm not in account_realms.get(item.account):
                     account_realms.setdefault(item.account, []).append(item.realm)
-                    account_realm_tabs.update({item.account+item.realm : ttk.Frame(account_tab_control[item.account])})
-                    account_tab_control[item.account].add(account_realm_tabs[item.account+item.realm], text=item.realm)
+                    account_realm_tabs.update({item.ar_key : ttk.Frame(account_tab_control[item.account])})
+                    account_tab_control[item.account].add(account_realm_tabs[item.ar_key], text=item.realm)
                     if not item.realm == 'Global':
-                        account_realm_tab_control.update({item.account+item.realm : ttk.Notebook(account_realm_tabs[item.account+item.realm])})
-                        account_realm_tab_control[item.account+item.realm].grid(row=0,column=0)
+                        account_realm_tab_control.update({item.ar_key : ttk.Notebook(account_realm_tabs[item.ar_key])})
+                        account_realm_tab_control[item.ar_key].grid(row=0,column=0)
                     else:
-                        if item.account + item.name not in macro_frames:
-                            macro_canvas_frames.update({item.arn_key :tk.Frame(account_realm_tabs[item.account+item.realm],
-                            relief=tk.GROOVE,width=500,height=400,bd=1)})
-                            macro_canvas_frames[item.arn_key].grid(row=0, column=0)
-                            macro_canvas.update({item.arn_key : tk.Canvas(macro_canvas_frames[item.arn_key], highlightthickness=0)})
-                            macro_frames.update({item.arn_key : tk.Frame(macro_canvas[item.arn_key])})
-                            macro_scrollbars.update({item.arn_key : tk.Scrollbar(macro_canvas_frames[item.arn_key],
-                                orient="vertical",command=macro_canvas[item.arn_key].yview)})
-                            macro_canvas[item.arn_key].configure(yscrollcommand=macro_scrollbars[item.arn_key].set)
-                            macro_scrollbars[item.arn_key].pack(side="right",fill="y")
-                            macro_canvas[item.arn_key].pack(side="left")
-                            macro_canvas[item.arn_key].create_window((0,0),window=macro_frames[item.arn_key],anchor="nw")
+                        if item.arn_key not in macro_frames:
+                            macro_canvas_frames.update({item.arn_key :tk.Frame(account_realm_tabs[item.ar_key],
+                                relief=tk.GROOVE,width=500,height=400,bd=1)})
                             create_macro_gui(item)
             if item.account == objects.account and item.realm == objects.realm and not item.name == 'Global':
-                if account_realm_character.get(item.account+item.realm) == None or item.name not in account_realm_character.get(item.account+item.realm):
-                    account_realm_character.setdefault(item.account+item.realm, []).append(item.name)
-                    account_realm_character_tabs.update({item.arn_key : ttk.Frame(account_realm_tab_control[item.account+item.realm])})
-                    account_realm_tab_control[item.account+item.realm].add(account_realm_character_tabs[item.arn_key], text=item.name)
-                    if item.realm + item.name not in macro_frames:
+                if account_realm_character.get(item.ar_key) == None or item.name not in account_realm_character.get(item.ar_key):
+                    account_realm_character.setdefault(item.ar_key, []).append(item.name)
+                    account_realm_character_tabs.update({item.arn_key : ttk.Frame(account_realm_tab_control[item.ar_key])})
+                    account_realm_tab_control[item.ar_key].add(account_realm_character_tabs[item.arn_key], text=item.name)
+                    if item.arn_key not in macro_frames:
                         macro_canvas_frames.update({item.arn_key :tk.Frame(account_realm_character_tabs[item.arn_key],
                             relief=tk.GROOVE,width=500,height=400,bd=1)})
-                        macro_canvas_frames[item.arn_key].grid(row=0, column=0)
-                        macro_canvas.update({item.arn_key : tk.Canvas(macro_canvas_frames[item.arn_key], highlightthickness=0)})
-                        macro_frames.update({item.arn_key : tk.Frame(macro_canvas[item.arn_key])})
-                        macro_scrollbars.update({item.arn_key : tk.Scrollbar(macro_canvas_frames[item.arn_key],
-                            orient="vertical",command=macro_canvas[item.arn_key].yview)})
-                        macro_canvas[item.arn_key].configure(yscrollcommand=macro_scrollbars[item.arn_key].set)
-                        macro_scrollbars[item.arn_key].pack(side="right",fill="y")
-                        macro_canvas[item.arn_key].pack(side="left")
-                        macro_canvas[item.arn_key].create_window((0,0),window=macro_frames[item.arn_key],anchor="nw")
                         create_macro_gui(item)
     runCanv()
     resetScroll()
