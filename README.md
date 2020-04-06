@@ -1,6 +1,6 @@
 # MacroViewer
 
-** This is an abandoned project. Keeping it up mostly for nostalgic reasons, as this was an early learning project (and therefor obviously has great flaws, however the code still works)**
+**This is an abandoned project. Keeping it up mostly for nostalgic reasons, as this was an early learning project (and therefor obviously has great flaws, however the code still works)**
 
 Application for viewing your World of Warcraft macros from cached text files in the game diretory.
 This lists/displays all macros under a hierarchy of tabs starting from Account name -> Realm name -> Character name
