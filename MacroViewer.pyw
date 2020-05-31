@@ -51,9 +51,9 @@ def pathfind():
                 for dir_name in ["world of warcraft", "wow"]:
                     if dir_name in templist:
                         if os.path.exists(
-                            drive + path + "\\" + dir_name + "\\_retail_"
+                            drive + path + "\\" + dir_name + "\\_classic_"
                         ):
-                            path = drive + path + "\\" + dir_name + "\\_retail_"
+                            path = drive + path + "\\" + dir_name + "\\_classic_"
                             conn = sqlite3.connect(home + "\\" + "config.db")
                             c = conn.cursor()
                             c.execute(
