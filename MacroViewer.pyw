@@ -1,8 +1,8 @@
 import os
+from os.path import expanduser
 import sqlite3
 import tkinter as tk
 import tkinter.messagebox
-from os.path import expanduser
 from tkinter import simpledialog, ttk
 
 from appicon import iconData
